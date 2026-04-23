@@ -43,11 +43,15 @@ if (!defined('WT_MARGIN_LOW_THRESHOLD')) {
 }
 
 if (!defined('WT_EXCLUSION_META_KEY')) {
-    define('WT_EXCLUSION_META_KEY', '_wt_ppc');
+    define('WT_EXCLUSION_META_KEY', '_ampology_ppc');
 }
 
 if (!defined('WT_GTIN_META_KEY')) {
-    define('WT_GTIN_META_KEY', '_wt_gtin');
+    define('WT_GTIN_META_KEY', '_ampology_gtin');
+}
+
+if (!defined('WT_MPN_META_KEY')) {
+    define('WT_MPN_META_KEY', '_ampology_mpn');
 }
 
 if (defined('WP_CLI') && WP_CLI) {
@@ -264,8 +268,7 @@ function wt_generate_openai_feed_command($args, $assoc_args) {
                     $product_item['gtin'] = $gtin;
                 }
 
-                $sku = (string) $current_product->get_sku();
-                $mpn = (strlen($sku) > WT_SKU_PREFIX_LENGTH) ? substr($sku, WT_SKU_PREFIX_LENGTH) : '';
+                $mpn = (string) get_post_meta($current_product->get_id(), WT_MPN_META_KEY, true);
                 if (!empty($mpn)) {
                     $product_item['mpn'] = $mpn;
                 }
